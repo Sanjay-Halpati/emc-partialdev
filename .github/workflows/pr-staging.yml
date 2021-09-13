@@ -23,24 +23,24 @@ jobs:
       
       # Install Salesforce CLI
       - name: 'Build and Deploy'
-          run: |
+        run: |
             wget https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
             mkdir sfdx-cli
             tar xJf sfdx-linux-amd64.tar.xz -C sfdx-cli --strip-components 1
             ./sfdx-cli/install
                   
-          # Decrypt file
-            - name: 'Decrypt file'
-              run: openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out server.key -base64 -K ${{secrets.DECRYPTION_KEY}} -iv ${{secrets.DECRYPTION_IV}}
+      # Decrypt file
+      - name: 'Decrypt file'
+        run: openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out server.key -base64 -K ${{secrets.DECRYPTION_KEY}} -iv ${{secrets.DECRYPTION_IV}}
               
-          # Authorize
-            - name: 'Authorize Dev Hub'
-              run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{USERNAME}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+      # Authorize
+      - name: 'Authorize Dev Hub'
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{USERNAME}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
-          # convert
-            - name: 'Convert Metadata'
-              run: sfdx force:source:convert --rootdir=force-app --outputdir=convert
+      # convert
+      - name: 'Convert Metadata'
+        run: sfdx force:source:convert --rootdir=force-app --outputdir=convert
 
-          # Run Apex tests
-            - name: 'Run Apex tests on metadata'
-              run: 'sfdx force:mdapi:deploy --deploydir=convert --testlevel=RunLocalTests --checkonly -u hub-org
+      # Run Apex tests
+      - name: 'Run Apex tests on metadata'
+        run: 'sfdx force:mdapi:deploy --deploydir=convert --testlevel=RunLocalTests --checkonly -u hub-org

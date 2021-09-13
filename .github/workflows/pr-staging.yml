@@ -34,9 +34,9 @@ jobs:
             shell: bash
           run: 'echo ${{ secrets.SFDX_TEST_URL}} > ./SFDX_TEST_URL.txt'
 
-          # Authenticate dev hub
+          # Authorize
             - name: 'Authenticate Dev Hub'
-              run: 'sfdx force:auth:sfdxurl:store -f ./SFDX_TEST_URL.txt -a partialdev -d'
+              run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{USERNAME}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=my-hub-org
 
           # Run Apex tests in scratch org
             - name: 'Run Apex tests'

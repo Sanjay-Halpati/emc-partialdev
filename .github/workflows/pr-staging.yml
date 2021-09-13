@@ -35,7 +35,7 @@ jobs:
               
       # Authorize
       - name: 'Authorize Dev Hub'
-        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{USERNAME}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
       # convert
       - name: 'Convert Metadata'

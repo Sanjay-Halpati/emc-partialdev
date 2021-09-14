@@ -50,7 +50,7 @@ jobs:
       
       # convert
       - name: 'Convert Metadata'
-        run: sfdx force:source:convert --mainfest=package/package.xml --outputdir=convert
+        run: sfdx force:source:convert --manifest=package/package.xml --outputdir=convert
       
       # TestConfluence
       - name: Read TestConfluence

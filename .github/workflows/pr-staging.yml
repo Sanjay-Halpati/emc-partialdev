@@ -61,8 +61,8 @@ jobs:
       
       # Print TestConfluence content
       - name: Echo package.json
-        run: echo "${{ steps.testconfluence.outputs.content }}"  
+        run: echo "${{steps.testconfluence.outputs.content}}"  
 
       # Run Apex tests
       - name: 'Run Apex tests on metadata'
-        run:  sfdx force:mdapi:deploy --deploydir=convert --testlevel=RunSpecifiedTests --runtests=DemoClassTest --checkonly -u hub-org -w30
+        run:  sfdx force:mdapi:deploy --deploydir=convert --testlevel=RunSpecifiedTests --runtests=${{steps.testconfluence.outputs.content}} --checkonly -u hub-org -w30

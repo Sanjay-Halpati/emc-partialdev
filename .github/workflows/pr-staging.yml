@@ -57,7 +57,7 @@ jobs:
         id: testconfluence
         uses: juliangruber/read-file-action@v1
         with:
-          path: assets/TestConfluence.txt
+          path: assets/TestConfluence.json
       
       # Print TestConfluence content
       - name: Echo package.json

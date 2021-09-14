@@ -1,6 +1,9 @@
 public with sharing class DemoClass {
-    /* Demo class */
-    /* Here adding test comment */
-    /* Add Test comment 1*/
-    /* Add Test comment 2*/
+    /* Push to new branch */
+    /* Push to new branch 2*/
+
+    public DemoClass() {
+        Decimal a = 4+6;
+        System.debug('Test class: ' + a);
+    }
 }

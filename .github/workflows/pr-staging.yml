@@ -58,6 +58,7 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: assets/TestConfluence.json
+          trim: true
       
       # Print TestConfluence content
       - name: Echo package.json

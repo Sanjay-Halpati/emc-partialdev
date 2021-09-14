@@ -43,4 +43,4 @@ jobs:
 
       # Run Apex tests
       - name: 'Run Apex tests on metadata'
-        run: sfdx force:source:deploy -m ApexClass -l RunLocalTests
+        run: sfdx force:source:deploy --testlevel RunLocalTests

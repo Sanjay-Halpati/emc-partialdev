@@ -40,6 +40,17 @@ jobs:
       # convert
       - name: 'Convert Metadata'
         run: sfdx force:source:convert --rootdir=force-app --outputdir=convert
+      
+      # TestConfluence
+      - name: Read TestConfluence
+        id: testconfluence
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: assets/TestConfluence.txt
+      
+      # Print TestConfluence content
+      - name: Echo package.json
+        run: echo "${{ steps.testconfluence.outputs.content }}"  
 
       # Run Apex tests
       - name: 'Run Apex tests on metadata'

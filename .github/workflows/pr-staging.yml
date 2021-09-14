@@ -40,6 +40,17 @@ jobs:
       # convert
       - name: 'Convert Metadata'
         run: sfdx force:source:convert --rootdir=force-app --outputdir=convert
+      
+      # convert
+      - name: 'Read Test classes'
+        id: package
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./assets/TestClasses.txt 
+      
+      # Print test class data
+      - name: Echo test.text
+        run: echo "${{ steps.package.outputs.content }}"
 
       # Run Apex tests
       - name: 'Run Apex tests on metadata'

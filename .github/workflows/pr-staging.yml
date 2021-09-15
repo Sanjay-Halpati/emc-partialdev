@@ -57,7 +57,7 @@ jobs:
         id: testconfluence
         uses: juliangruber/read-file-action@v1
         with:
-          path: assets/TestConfluence.json
+          path: assets/TestConfluence.txt
           trim: true
       
       # Print TestConfluence content

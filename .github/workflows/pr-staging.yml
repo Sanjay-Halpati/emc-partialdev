@@ -35,6 +35,7 @@ jobs:
               
       # Authorize
       - name: 'Authorize Dev Hub'
+        if: ${{ github.base_ref == 'TestingDevlop' }}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
       
       # Create Delta
@@ -62,7 +63,7 @@ jobs:
       
       # Print TestConfluence content
       - name: Echo package.json
-        run: echo "${{steps.testconfluence.outputs.content}}"  
+        run: echo "${{steps.testconfluence.outputs.content}} $GITHUB_REF $GITHUB_BASE_REF"  
 
       # Run Apex tests
       - name: 'Run Apex tests on metadata'

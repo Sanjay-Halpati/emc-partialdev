@@ -63,7 +63,7 @@ jobs:
       
       # Print TestConfluence content
       - name: Echo package.json
-        run: echo "${{steps.testconfluence.outputs.content}} $GITHUB_WORKSPACE $GITHUB_SHA"  
+        run: echo "${{steps.testconfluence.outputs.content}} $GITHUB_REF $GITHUB_BASE_REF"  
 
       # Run Apex tests
       - name: 'Run Apex tests on metadata'

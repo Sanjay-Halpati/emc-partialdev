@@ -51,6 +51,45 @@ public with sharing class ReportDetailsController
         }
         
     }
+    
+    @AuraEnabled
+    public static string getMangerData (String reportid){
+        Custom_Report__c obj_current_report = new Custom_Report__c();
+        String getdataofdriver;
+         String managerdriverlist;
+            obj_current_reportStr = getReportDetail(reportid);
+            if(obj_current_report!=null)
+            {
+                if(obj_current_report.Use_Driver_List__c==true)
+                {
+                    managerdriverlist= getAllManagers('Driver');
+                    system.debug('managerdriverlist'+managerdriverlist);
+                    getdataofdriver = getAllReportSoqlForDriver();
+                }
+                else if(obj_current_report.Use_Manager_List__c==true)
+                {
+                    managerdriverlist= getAllManagers('Manager');
+                    getdataofmanager =getAllReportSoqlForManager();
+                }
+                if(obj_current_report.Use_Bussiness_Unit__c==true)
+                {
+                    
+                }
+                /*if(obj_current_report.Use_Payment_Status__c==true)
+                {
+                   getPaymentStatusList= getPaymentStatus();
+                }*/
+                
+                return getdataofdriver;
+            }
+        
+        else
+        {
+            // Exception page.
+        }
+        return '';
+    }
+    @AuraEnabled
     public static String getReportDetail(String reportid)
     {
         List<String> obj_list_of_headers = new List<String>();
@@ -60,6 +99,7 @@ public with sharing class ReportDetailsController
        // return '';     
     }
 
+    @AuraEnabled
     public static String getAllReportSoql1(String reportSoql,String reporttype,String selectedManager, String tripStartDate, String tripEndDate,String contactid,String accountid,String reportid,String driverormanager)
     {
         String query  = reportSoql;
@@ -903,6 +943,7 @@ public with sharing class ReportDetailsController
         }
         return '';
     }
+    @AuraEnabled
     public static String getAllReportSoqlForDriver()
     {     
         string data;
@@ -926,6 +967,7 @@ public with sharing class ReportDetailsController
         return data;
         //return getAllReportSoql1(obj_current_report.Report_Soql__c,obj_current_report.Report_Type__c,'',String.valueOf((System.today().addMonths(-1).toStartOfMonth()).format()),String.valueOf((System.today().toStartOfMonth()).format()),getContactid(),getAccountid(),getReportid(),'Driver'); 
     }
+    @AuraEnabled
     public static String getAllReportSoqlForManager()
     {     
         string data;
@@ -947,11 +989,13 @@ public with sharing class ReportDetailsController
         return data;
          //return getAllReportSoql1(obj_current_report.Report_Soql__c,obj_current_report.Report_Type__c,'',String.valueOf((System.today().addMonths(-1).toStartOfMonth()).format()),String.valueOf((System.today().toStartOfMonth()).format()),getContactid(),getAccountid(),getReportid(),'Manager'); 
     }
-    @RemoteAction
+    //@RemoteAction
+    @AuraEnabled
     public static String getAllReportSoql(String reportSoql,String reporttype,String selectedManager, String tripStartDate, String tripEndDate,String contactid,String accountid,String reportid,String driverormanager)
     {
         return getAllReportSoql1(reportSoql,reporttype,selectedManager,tripStartDate,tripEndDate,contactid,accountid,reportid,driverormanager); 
     }
+    @AuraEnabled
     public static List<String> getReimbursmentIdsList(String query,Map<String,String> contactReimbursementMap)
     {
         List<Employee_Reimbursement__c> reimbursementList = Database.query(query);
@@ -968,6 +1012,7 @@ public with sharing class ReportDetailsController
         }
         return employeeReimbursementsIds;
     }
+    @AuraEnabled
     public static String getAllReportHeaders1(String reportid)
     {
         List<String> obj_list_of_headers = new List<String>();
@@ -983,7 +1028,8 @@ public with sharing class ReportDetailsController
         }
         return '';
     }
-    @RemoteAction
+    //@RemoteAction
+    @AuraEnabled
     public static String getAllReportHeaders(String reportid)
     {
         return getAllReportHeaders1(reportid);
@@ -1066,6 +1112,7 @@ public with sharing class ReportDetailsController
         
         return String.escapeSingleQuotes(JSON.serialize(obj_Custom_Report));
     }*/
+    @AuraEnabled
     public static string getAllManagers(String role)
     {   
         if(role=='Driver')
@@ -1125,6 +1172,7 @@ public with sharing class ReportDetailsController
         }
         return JSON.serialize(paymentStatusList);     
     }*/
+   
     public static String buildDateforactivation(String datefield)
     {
         Date myDate = date.parse(datefield);

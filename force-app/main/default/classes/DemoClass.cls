@@ -8,7 +8,7 @@ public class DemoClass {
     public void getContact() {
         List<contact> contactList = [select id,Name from contact where Name like '%sanket%'];
         System.debug(contactList.size());
-
+    }
     /* Push to new branch */
     /* Push to new branch 2*/
 

@@ -1,4 +1,4 @@
-public with sharing class DemoClass {
+public class DemoClass {
 
     /* Demo class */
     /* Here adding test comment */

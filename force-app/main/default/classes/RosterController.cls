@@ -1279,9 +1279,9 @@ global without sharing class RosterController
     }
     
     @RemoteAction
-    public static void MassSyncTrips(String accountId,String startDate,String endDate,String month,String tripStatus){
+    public static void MassSyncTrips(String accountId,String startDate,String endDate,String month,String tripStatus,String activityStatus){
         System.debug('startDate'+startDate+'=======endDate'+endDate+'accountId'+accountId);
-        MassSyncTrips  obj = new MassSyncTrips(accountId,startDate,endDate,month,tripStatus,false);
+        MassSyncTrips  obj = new MassSyncTrips(accountId,startDate,endDate,month,tripStatus,false,activityStatus);
         Database.executeBatch (obj,1);
     }
     public static List<String> getMonths(Integer month) {

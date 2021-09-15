@@ -7,11 +7,6 @@ public with sharing class GetDriverDataTest {
         customEmailSetting.ContactTriCommunityReimCreate__c = false;
         insert customEmailSetting;
         
-        TriplogPutCall__c customPut = new TriplogPutCall__c();
-        customPut.name = 'GetDriverData';
-        customPut.TriplogPut__c = true;
-        insert customPut;
-        
         List<IRS_Mileage_Rate__c> obj_IRS_Mileage_Rate =  RecordUtilityClass.insertIrsRate();
         
         SendEmail__c customSetting =  new SendEmail__c();
@@ -105,17 +100,14 @@ public with sharing class GetDriverDataTest {
         GetDriverData.fetchMileages(acc.Id,con1.id,1,2);
         GetDriverData.fetchMileagesSize(acc.Id,con1.id);
         GetDriverData.buildDateforactivation(System.today());
-        GetDriverData.approveMileages(true,json,false,false);
+        GetDriverData.approveMileages(true,json,false);
         GetDriverData.getMilegesData(acc.Id,con1.id,conList.Id,System.today(),System.today()+1,'denverstreet','Denver',true,'10','50','Approved','MagicTrip','magic','abc','Business',1,2);
         GetDriverData.fetchWayPointPostAPI(1234555,'apikey');
         GetDriverData.getMilegesDataSize(acc.Id,con1.id,conList.Id,System.today(),System.today()+1,'denverstreet','Denver',true,'10','50','Approved','MagicTrip','magic','abc','Business');
         GetDriverData.updateMileages(emp.id,'magic','Business','test');
-        String jsondata = '[{\"id\":"'+emp.id+'",\"adminId\":"'+con1.Id+'",\"tripdate\":\"2021-08-17\",\"conName\":\"NIkita Patel\",\"conEmail\":\"nikita.patel@kiwiqa.com\",\"oldActivity\":\"Business\",\"mileage\":\"100\",\"actualMileage\":\"100\",\"tripId\":2000669507,\"accApi\":\"28beeea973f34daf89050a9b6a3b1a71\"}]';
-        GetDriverData.massUpdateActivityEmail('Commute',jsondata);
-        GetDriverData.updateMileagesEmail(con1.id,System.today(),conList.FirstName+' '+ conList.LastName,conList.External_Email__c,'Commute','Business','10','20',1234576,acc.Triplog_API__c);
+        GetDriverData.updateMileagesEmail(con1.id,System.today(),conList.FirstName+' '+ conList.LastName,conList.External_Email__c,'Commute','Business','10','20');
         GetDriverData.deleteMileages(json);
         GetDriverData.mileageListData(acc.Id,con1.Id,System.today(),System.today()+10);
         GetDriverData.deleteTrips(acc.Id,'05-2021');
-        
     }
 }

@@ -1,4 +1,5 @@
 public with sharing class DemoClass {
+
     /* Demo class */
     /* Here adding test comment */
     /* Add Test comment 1*/
@@ -7,5 +8,12 @@ public with sharing class DemoClass {
     public void getContact() {
         List<contact> contactList = [select id,Name from contact where Name like '%sanket%'];
         System.debug(contactList.size());
+
+    /* Push to new branch */
+    /* Push to new branch 2*/
+
+    public DemoClass() {
+        Decimal a = 4+6;
+        System.debug('Test class: ' + a);
     }
 }

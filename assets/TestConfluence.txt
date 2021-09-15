@@ -1,1 +1,2 @@
 DemoClassTest
+DemoClass2Test

@@ -1,4 +1,4 @@
-public with sharing class DemoClass2 {
+public class DemoClass2 {
     /* Add New Comment*/
     public DemoClass2() {
         Decimal a = 5+5;

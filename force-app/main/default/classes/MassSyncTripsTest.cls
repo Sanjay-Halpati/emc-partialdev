@@ -76,12 +76,11 @@ public class MassSyncTripsTest {
         emp.Contact_Email_Id__c = 'test@test.gmail.com';
         emp.Name = 'Test Mileage Record';
         emp.EmployeeReimbursement__c = er.id;
-        emp.Activity__c = 'Business';
         insert emp;
         
         Test.startTest();
         Test.SetMock(HttpCalloutMock.class, new GetTripCalloutMock());
-        MassSyncTrips obj = new MassSyncTrips(Acc.Id,'2020-10-01','2020-10-31','09-2020','U',false,'Business');
+        MassSyncTrips obj = new MassSyncTrips(Acc.Id,'2020-10-01','2020-10-31','09-2020','U',false);
         DataBase.executeBatch(obj);
         
         Test.stopTest();

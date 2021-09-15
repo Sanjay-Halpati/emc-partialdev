@@ -405,7 +405,7 @@ public with sharing class GetDriverData {
     }
     
     @AuraEnabled
-    public static String approveMileages(Boolean checked,String emailaddress,Boolean sendEmail)
+    public static String approveMileages(Boolean checked,String emailaddress,Boolean sendEmail,Boolean unapprove)
     { 
         system.debug('checked'+checked);
         system.debug('emailaddress'+emailaddress);
@@ -433,17 +433,29 @@ public with sharing class GetDriverData {
         }
         if(checked == true ) {
             mileagesToApprove = WrapperUtils.UpdateMileages(mileageIds,'Approved');
-        }
-        else {
+        } else if(unapprove == true){
+            List<Employee_Mileage__c> mileages = new List<Employee_Mileage__c>();
+            for(String mileageId : mileageIds) {
+                Employee_Mileage__c mil = new Employee_Mileage__c();
+                mil.Id = mileageId;
+                mil.name = mileageId;
+                mil.Trip_Status__c = 'Not Approved Yet';
+                mil.Approved_Date__c = null;
+                mil.Rejected__c = false;
+                mileagesToApprove.add(mil);
+            }
+            //mileagesToApprove = WrapperUtils.UpdateMileages(mileageIds,'Not Approved Yet');
+        } else {
             mileagesToApprove = WrapperUtils.UpdateMileages(mileageIds,'Rejected');
         }
+
         if(!mileagesToApprove.isEmpty()) {
             system.debug('mileagesToApprove'+mileagesToApprove);
             update mileagesToApprove;
         }
     
             SendEmailToMe__c customSetValue = SendEmailToMe__c.getValues('ChangeTripStatusinTripLogBatch');
-            if(customSetValue != null && customSetValue.Send_email_to_me__c == true)
+            if(customSetValue != null && customSetValue.Send_email_to_me__c == true && unapprove == false)
             {
                 if(approveRejectMileageMap.size() > 0 && !Test.isRunningTest()){
                     for(String currentMileages : approveRejectMileageMap.keySet()){
@@ -506,10 +518,28 @@ public with sharing class GetDriverData {
     }
     
     @AuraEnabled
-    public static void updateMileagesEmail(String adminId,date tripdate,String conName,String conEmail,String oldActivity,String newActivity,String mileage,String actualMileage)
+    public static void updateMileagesEmail(String adminId,date tripdate,String conName,String conEmail,String oldActivity,String newActivity,String mileage,String actualMileage,Integer tripId,String accApi)
     { 
         if(newActivity != oldActivity){
-           Contact conObj ;
+            if(tripId != null && accApi != null){
+                String MLOGACCOUNT = System.Label.Triplog_New_URL;
+                String baseURL = !MLOGACCOUNT.Contains(accApi) ? StaticValues.TRIPLOG_BASEURL : StaticValues.MLOG_BASEURL;
+                String rosterURL = baseURL + '/api/trips/'+tripId;
+                String body = '{"activity":'+newActivity+'}';
+                TriplogPutCall__c objTriplog = TriplogPutCall__c.getValues('GetDriverData');
+                String jsonSubset;
+                try {
+                    if(!Test.isRunningTest() && objTriplog.TriplogPut__c == true) {
+                        HttpResponse res = ApiCalloutUtility.executeCallout(accApi,'PUT',rosterURL,'',body);
+                        Map<String,Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(res.getBody());
+                        jsonSubset = JSON.serialize(jsonMap.get('message'));
+                        system.debug('jsonSubset'+jsonSubset);
+                    }
+                } catch(System.CalloutException er) {
+                }
+            }
+            
+            Contact conObj ;
             if(!String.isBlank(adminId) || !String.isEmpty(adminId)){
                 conObj = [SELECT id,Name FROM Contact WHERE id =: adminId LIMIT 1];
             }
@@ -556,7 +586,25 @@ public with sharing class GetDriverData {
         }
         
     }
-    
+    @AuraEnabled
+    public static string massUpdateActivityEmail(String newActivity,String jsondata)
+    { 
+        List<Employee_Mileage__c> mileageList = new List<Employee_Mileage__c>();
+        system.debug('newActivity'+newActivity);
+        system.debug('jsondata'+jsondata);
+        List<ChangeActivityJSON2Apex> tripJson = ChangeActivityJSON2Apex.parse(jsondata);
+        for(ChangeActivityJSON2Apex objMileages : tripJson) {
+            Employee_Mileage__c mil = new Employee_Mileage__c();
+            mil.Id = objMileages.Id;
+            mil.Activity__c = newActivity;
+            mileageList.add(mil);
+        }
+        if(mileageList.size() > 0){
+            update mileageList;
+        }
+        Database.executeBatch(New ChangeActivityInMlogEmail(newActivity,jsondata),100);
+        return 'Success ';
+    } 
     @AuraEnabled
     public static List<Employee_Mileage__c> mileageListData(String accId,String adminId, date startDate, date endDate){
         system.debug('accId'+accId);
@@ -641,4 +689,6 @@ public with sharing class GetDriverData {
         Database.executeBatch (obj,1);
         return 'Success';
     } 
+
+ 
 }

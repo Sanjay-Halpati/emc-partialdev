@@ -5,14 +5,16 @@ global class MassSyncTrips implements Database.Batchable<sObject>,Database.State
     public string lastMonth;
     public string tripStatus;
     public Boolean putcall;
+    public String activityStatus;
     global Set<Id> reimbursementIds = new Set<Id>();
-    public MassSyncTrips(String accountId,String minDate,String maxDate,String month,String status,Boolean putapi) {
+    public MassSyncTrips(String accountId,String minDate,String maxDate,String month,String status,Boolean putapi,String activity) {
         accid = accountId;
         startDate = minDate;
         endDate = maxDate;
         lastMonth = month;
         tripStatus = status;
         putcall = putapi;
+        activityStatus = activity;
     }
     global Database.QueryLocator start(Database.BatchableContext BC) 
     {
@@ -34,7 +36,8 @@ global class MassSyncTrips implements Database.Batchable<sObject>,Database.State
         {
             reimbursementIds.add(reim.id);
             if( !Test.IsRunningTest()){
-                GetTripCallout.GetTripCalloutForMileage(reim.id, reim.Contact_Id__r.External_Email__c, reim.Contact_Id__c, startDate, endDate, String.valueOf(reim.Fuel_Price__c), String.valueOf(reim.MPG__c), String.valueOf(reim.Maintenance_and_Tires__c), reim.Contact_Id__r.Account.Triplog_API__c, tripStatus ,putcall);
+                //GetTripCallout.GetTripCalloutForMileage(reim.id, reim.Contact_Id__r.External_Email__c, reim.Contact_Id__c, startDate, endDate, String.valueOf(reim.Fuel_Price__c), String.valueOf(reim.MPG__c), String.valueOf(reim.Maintenance_and_Tires__c), reim.Contact_Id__r.Account.Triplog_API__c, tripStatus ,putcall);
+                GetTripCalloutforCommute.GetTripCalloutForCommuteMileage(reim.id, reim.Contact_Id__r.External_Email__c, reim.Contact_Id__c, startDate, endDate, String.valueOf(reim.Fuel_Price__c), String.valueOf(reim.MPG__c), String.valueOf(reim.Maintenance_and_Tires__c), reim.Contact_Id__r.Account.Triplog_API__c, tripStatus ,putcall,activityStatus);
             }
         }
     }

@@ -22,6 +22,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+
+      # Print
+      - name: Echo package.json
+        run: echo " $GITHUB_REF $GITHUB_BASE_REF" 
       
       # Install Salesforce CLI
       - name: 'Build and Deploy'
@@ -34,11 +38,13 @@ jobs:
       # Decrypt file
       - name: 'Decrypt file'
         run: openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out server.key -base64 -K ${{secrets.DECRYPTION_KEY}} -iv ${{secrets.DECRYPTION_IV}}
-              
+
+
+
       # Authorize TestingDevlop
       - name: 'Authorize TestingDevlop'
         if: ${{ github.ref == 'refs/heads/TestingDevlop' }}
-        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile --setdefaultdevhubusername --setalias=hub-org
 
       # Authorize develop
       - name: 'Authorize develop'

@@ -16,7 +16,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
-        baseBranch: ${{GITHUB_BASE_REF}}
+        baseBranch: $GITHUB_BASE_REF
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it

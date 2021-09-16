@@ -15,8 +15,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    env:
-        baseBranch: $GITHUB_BASE_REF
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -36,7 +35,7 @@ jobs:
               
       # Authorize
       - name: 'Authorize Dev Hub'
-        if: ${{ github.base_ref == env.baseBranch}}
+        #if: ${{ github.base_ref == 'TestingDevlop'}}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
       
       # Run Script
@@ -50,8 +49,8 @@ jobs:
           git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
           git fetch --all
           git checkout -b pr
-          git --no-pager diff --name-status pr origin/${{env.baseBranch}}
-          sgd --to pr --from origin/${{env.baseBranch}} --repo . --output .
+          git --no-pager diff --name-status pr origin/$GITHUB_BASE_REF
+          sgd --to pr --from origin/$GITHUB_BASE_REF --repo . --output .
           cat package/package.xml
       
       # convert

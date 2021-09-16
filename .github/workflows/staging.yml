@@ -49,7 +49,7 @@ jobs:
       - name: 'Authorize TestingDevlop'
         #if: ${{ github.ref == 'refs/heads/TestingDevlop' }}
         if: ${{ github.ref == 'refs/heads/feature' }}
-        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile --setdefaultdevhubusername --setalias=hub-org
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
       # Authorize develop
       - name: 'Authorize develop'

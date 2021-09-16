@@ -6,7 +6,7 @@ name: 'TestingDevlop Push'
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ TestingDevlop, feature ]
+    branches: [ master, staging, develop, TestingDevlop ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,6 +23,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       
+      # Get banch name (Merge)
+      - name: Get branch name (merge)
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+        
+      # Print  
+      - name: Debug
+        run: echo ${{ env.BRANCH_NAME }}
+
       # Install Salesforce CLI
       - name: 'Build and Deploy'
         run: |
@@ -34,20 +44,56 @@ jobs:
       # Decrypt file
       - name: 'Decrypt file'
         run: openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out server.key -base64 -K ${{secrets.DECRYPTION_KEY}} -iv ${{secrets.DECRYPTION_IV}}
-              
-      # Authorize
-      - name: 'Authorize Dev Hub'
-        if: ${{ github.ref == 'refs/heads/TestingDevlop' }}
+
+      # Authorize TestingDevlop
+      - name: 'Authorize TestingDevlop'
+        if: ${{ env.BRANCH_NAME == 'TestingDevlop' }}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
-      
-      # Create Delta
-      - name: 'Install App and Create Delta'
+
+      # Authorize develop
+      - name: 'Authorize develop'
+        if: ${{ env.BRANCH_NAME == 'develop' }}
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+
+      # Authorize staging
+      - name: 'Authorize staging'
+        if: ${{ env.BRANCH_NAME == 'staging' }}
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+
+      # Authorize master
+      - name: 'Authorize master'
+        if: ${{ env.BRANCH_NAME == 'master' }}
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+
+      # Create Delta for TestingDevlop branch
+      - name: 'Install App and Create Delta for TestingDevlop'
+        if: ${{ env.BRANCH_NAME == 'TestingDevlop'}}
         run: |
           sudo npm install sfdx-git-delta@latest -g
           git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
           git fetch --all
-          git --no-pager diff --name-status TestingDevlop origin/master
-          sgd --to TestingDevlop --from origin/master --repo . --output .
+          git --no-pager diff --name-status TestingDevlop origin/staging
+          sgd --to TestingDevlop --from origin/staging --repo . --output .
+          cat package/package.xml
+      # Create Delta for develop branch
+      - name: 'Install App and Create Delta for develop'
+        if: ${{ env.BRANCH_NAME == 'develop'}}
+        run: |
+          sudo npm install sfdx-git-delta@latest -g
+          git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+          git fetch --all
+          git --no-pager diff --name-status develop origin/staging
+          sgd --to develop --from origin/staging --repo . --output .
+          cat package/package.xml
+      # Create Delta for staging branch
+      - name: 'Install App and Create Delta for develop'
+        if: ${{ env.BRANCH_NAME == 'staging'}}
+        run: |
+          sudo npm install sfdx-git-delta@latest -g
+          git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+          git fetch --all
+          git --no-pager diff --name-status staging origin/master
+          sgd --to staging --from origin/master --repo . --output .
           cat package/package.xml
       
       # convert

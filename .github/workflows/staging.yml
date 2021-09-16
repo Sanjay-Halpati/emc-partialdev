@@ -77,7 +77,6 @@ jobs:
 
       # Create Delta for Feature branch
       - name: 'Install App and Create Delta for TestingDevlop'
-        if: ${{ github.base_ref == 'feature'}}
         run: |
           sudo npm install sfdx-git-delta@latest -g
           git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'

@@ -38,7 +38,11 @@ jobs:
 
       # Github base ref
       - name: 'Github base ref'
-        run: echo "${{ github.base_ref }} ---  github.event.pull_request.base.ref  "
+        run: echo "${{ github.base_ref }} ---  $github.event.pull_request.base.ref  "
+
+      # Github base ref
+      - name: 'Github base ref'
+        run: $github.event.pull_request.base.ref
 
       # Install Salesforce CLI
       - name: 'Build and Deploy'

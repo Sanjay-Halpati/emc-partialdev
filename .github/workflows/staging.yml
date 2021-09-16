@@ -40,10 +40,6 @@ jobs:
       - name: 'Github base ref'
         run: "$github.base_ref"
 
-      # Github base ref
-    - name: 'Github base ref'
-      run: "${{github.base_ref}}"
-
       # Install Salesforce CLI
       - name: 'Build and Deploy'
         run: |

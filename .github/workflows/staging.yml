@@ -31,6 +31,11 @@ jobs:
       - name: Run single line command
         run: env
 
+      
+      # Github base ref
+      - name: 'Github base ref'
+        run: echo "$github.base_ref"
+
       # Install Salesforce CLI
       - name: 'Build and Deploy'
         run: |

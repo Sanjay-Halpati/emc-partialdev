@@ -35,7 +35,10 @@ jobs:
               
       # Authorize
       - name: 'Authorize Dev Hub'
-        if: ${{ github.base_ref == 'TestingDevlop' }}
+        if: ${{ github.base_ref == 'TestingDevlop'}}
+        id: testingDevlop
+        if: ${{ github.base_ref == 'feature'}}
+        id: feature
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
       
       # Create Delta

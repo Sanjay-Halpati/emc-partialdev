@@ -1,9 +1,10 @@
 public with sharing class DemoClass {
     /* Push to new branch */
-    /* Push to new branch if: ${{ github.ref == 'refs/heads/staging' }}*/
-    /* Push new branch git-Priyanka-Demo to staging*/
+    /* Push to new branch new*/
+    /* Add Test comment 1*/
+    /* Add Test comment in emc-priyanka-demofeature2 branch*/
     public DemoClass() {
-        Decimal a = 7 + 7;
+        Decimal a = 6+6;
         System.debug('Test class: ' + a);
     }
 }

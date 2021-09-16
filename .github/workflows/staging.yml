@@ -43,7 +43,7 @@ jobs:
 
       # Github base ref
       - name: 'Github base ref'
-        run: echo "contains(github.event.head_commit.message, 'CONDITION 1 MSG')"
+        run: echo "${{contains(github.event.head_commit.message, 'CONDITION 1 MSG')}}"
 
       # Install Salesforce CLI
       - name: 'Build and Deploy'

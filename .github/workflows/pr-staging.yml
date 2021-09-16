@@ -38,6 +38,10 @@ jobs:
         if: ${{ github.base_ref == 'TestingDevlop'}}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
       
+      # Run Script
+      - name: Read One line Script
+        run: env
+      
       # Create Delta
       - name: 'Install App and Create Delta'
         run: |

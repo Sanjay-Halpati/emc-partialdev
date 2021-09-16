@@ -27,6 +27,10 @@ jobs:
       - name: Echo package.json
         run: echo " $GITHUB_REF $GITHUB_BASE_REF" 
       
+      # Print
+      - name: Run single line command
+        run: env
+
       # Install Salesforce CLI
       - name: 'Build and Deploy'
         run: |

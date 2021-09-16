@@ -4,7 +4,7 @@ name: 'TestingDevlop pull request check'
 # Controls when the workflow will run
 on:
   pull_request:
-    branches: [ $GITHUB_BASE_REF ]
+    branches: [ $GITHUB_BASE_REF]
     #branches: [ TestingDevlop, feature ]
 
   # Allows you to run this workflow manually from the Actions tab

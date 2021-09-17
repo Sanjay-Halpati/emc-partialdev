@@ -1,10 +1,11 @@
 # This is a basic workflow to help you get started with Actions
-name: 'Staging pull request check'
+name: 'TestingDevlop pull request check'
 
 # Controls when the workflow will run
 on:
   pull_request:
-    branches: [ staging ]
+    #branches: [ $GITHUB_BASE_REF]
+    branches: [ master, staging, develop, TestingDevlop ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -15,7 +16,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -34,7 +35,18 @@ jobs:
         run: openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out server.key -base64 -K ${{secrets.DECRYPTION_KEY}} -iv ${{secrets.DECRYPTION_IV}}
               
       # Authorize
-      - name: 'Authorize Dev Hub'
+      - name: 'Authorize TestingDevlop'
+        if: ${{ github.base_ref == 'TestingDevlop'}}
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+
+      # Authorize
+      - name: 'Authorize develop'
+        if: ${{ github.base_ref == 'develop'}}
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+        
+      # Authorize
+      - name: 'Authorize staging'
+        if: ${{ github.base_ref == 'staging'}}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
       
       # Create Delta
@@ -44,8 +56,8 @@ jobs:
           git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
           git fetch --all
           git checkout -b pr
-          git --no-pager diff --name-status pr origin/staging
-          sgd --to pr --from origin/staging --repo . --output .
+          git --no-pager diff --name-status pr origin/$GITHUB_BASE_REF
+          sgd --to pr --from origin/$GITHUB_BASE_REF --repo . --output .
           cat package/package.xml
       
       # convert
@@ -62,7 +74,7 @@ jobs:
       
       # Print TestConfluence content
       - name: Echo package.json
-        run: echo "${{steps.testconfluence.outputs.content}}"  
+        run: echo "${{steps.testconfluence.outputs.content}} $GITHUB_REF $GITHUB_BASE_REF"  
 
       # Run Apex tests
       - name: 'Run Apex tests on metadata'

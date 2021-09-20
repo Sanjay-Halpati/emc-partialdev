@@ -1,1 +1,1 @@
-DemoClass2Test,DemoClass
+DemoClass2Test,DemoClassTest

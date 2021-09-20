@@ -38,12 +38,12 @@ jobs:
       - name: Echo package.json
         run: echo "${{steps.testconfluence.outputs.content}} $GITHUB_REF $GITHUB_BASE_REF" 
         
-      # Authorize
+      # Authorize TestingDevlop
       - name: 'Authorize TestingDevlop'
         if: ${{ github.base_ref == 'TestingDevlop'}}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
-      # Authorize
+      # Authorize develop
       - name: 'Authorize develop'
         if: ${{ github.base_ref == 'develop'}}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
@@ -66,7 +66,7 @@ jobs:
       
       # convert
       - name: 'Convert Metadata'
-        run: sfdx force:source:convert --manifest=package.xml --outputdir=convert
+        run: sfdx force:source:convert --manifest=package/package.xml --outputdir=convert
       
       # TestConfluence
       - name: Read TestConfluence

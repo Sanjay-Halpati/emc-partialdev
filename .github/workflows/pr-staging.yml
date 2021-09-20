@@ -44,7 +44,7 @@ jobs:
         if: ${{ github.base_ref == 'develop'}}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
         
-      # Authorize
+      # Authorize staging
       - name: 'Authorize staging'
         if: ${{ github.base_ref == 'staging'}}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org

@@ -34,21 +34,17 @@ jobs:
       - name: 'Decrypt file'
         run: openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out server.key -base64 -K ${{secrets.DECRYPTION_KEY}} -iv ${{secrets.DECRYPTION_IV}}
               
-      # Print TestConfluence content
-      - name: Echo package.json
-        run: echo "${{steps.testconfluence.outputs.content}} $GITHUB_REF $GITHUB_BASE_REF" 
-        
-      # Authorize TestingDevlop
+      # Authorize
       - name: 'Authorize TestingDevlop'
         if: ${{ github.base_ref == 'TestingDevlop'}}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
-      # Authorize develop
+      # Authorize
       - name: 'Authorize develop'
         if: ${{ github.base_ref == 'develop'}}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
         
-      # Authorize staging
+      # Authorize
       - name: 'Authorize staging'
         if: ${{ github.base_ref == 'staging'}}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
@@ -74,7 +70,11 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: assets/TestConfluence.txt
-          trim: true 
+          trim: true
+      
+      # Print TestConfluence content
+      - name: Echo package.json
+        run: echo "${{steps.testconfluence.outputs.content}} $GITHUB_REF $GITHUB_BASE_REF"  
 
       # Run Apex tests
       - name: 'Run Apex tests on metadata'

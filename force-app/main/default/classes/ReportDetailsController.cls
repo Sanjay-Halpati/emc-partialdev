@@ -706,17 +706,31 @@ public with sharing class ReportDetailsController
             }  
             else if(reporttype=='Mileages Between 2 Trip Dates') 
             {
-               
+                String[] splitDate;
+                System.debug('tripStartDate'+tripStartDate);
+                if(tripStartDate.contains('/') && tripStartDate != null){
+                    splitDate = tripStartDate.Split('/');
+                }
+               System.debug('splitDate'+splitDate);
                 if(selectedManager==null || selectedManager=='')
-                {System.debug('tripStartDate'+tripStartDate);
-                System.debug('tripEndDate'+tripEndDate);
+                {
+                    System.debug('selectedManager');
                     if(!query.contains('where'))
                     {
-                        query = query+ ' where Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';                        
+                        if(splitDate != null && splitDate[2].length() == 4 && tripStartDate.contains('/')){
+                            query = query+ ' where Trip_Date__c>='+builTripsDate(tripStartDate)+' AND Trip_Date__c<='+builTripsDate(tripEndDate)+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';                        
+                        } else {
+                            System.debug('else ++');
+                            query = query+ ' where Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';                        
+                        }
                     }
                     else
-                    {   // yes
-                        query = query + ' AND Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';
+                    {    System.debug('else');
+                        if(splitDate != null && splitDate[2].length() == 4 && tripStartDate.contains('/')){
+                            query = query + ' AND Trip_Date__c>='+builTripsDate(tripStartDate)+' AND Trip_Date__c<='+builTripsDate(tripEndDate)+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';
+                        } else {
+                            query = query + ' AND Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';
+                        }
                     }
                     System.debug(query);
                     List<Employee_Mileage__c> obj_contact_list = Database.query(query);
@@ -724,26 +738,46 @@ public with sharing class ReportDetailsController
                 }            
                 else
                 {
+                    System.debug('Manager');
                     if(driverormanager=='Manager')
                     {
                         if(!query.contains('where'))
                         {
-                            query = query+ ' where Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__r.Manager__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';                       
+                            if(splitDate != null && splitDate[2].length() == 4 && tripStartDate.contains('/')){
+                                query = query+ ' where Trip_Date__c>='+builTripsDate(tripStartDate)+' AND Trip_Date__c<='+builTripsDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__r.Manager__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';                       
+                            } else {
+                                query = query+ ' where Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__r.Manager__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';                       
+                            }
+                            
                         }
                         else
                         {   // yes
-                            query = query + ' AND Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__r.Manager__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';
+                            if(splitDate != null && splitDate[2].length() == 4 && tripStartDate.contains('/')){
+                                query = query + ' AND Trip_Date__c>='+builTripsDate(tripStartDate)+' AND Trip_Date__c<='+builTripsDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__r.Manager__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';
+                            } else {
+                                query = query + ' AND Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__r.Manager__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';
+                            }
                         }
                     }
                     else
-                    {
+                    { System.debug('where=====');
                         if(!query.contains('where'))
                         {
-                            query = query+ ' where Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';                       
+                            if(splitDate != null && splitDate[2].length() == 4 && tripStartDate.contains('/')){
+                                query = query+ ' where Trip_Date__c>='+builTripsDate(tripStartDate)+' AND Trip_Date__c<='+builTripsDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';                       
+                            } else {
+                                query = query+ ' where Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';                       
+                            }
+                            
                         }
                         else
                         {   // yes
-                            query = query + ' AND Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';
+                            if(splitDate != null && splitDate[2].length() == 4 && tripStartDate.contains('/')){
+                                query = query + ' AND Trip_Date__c>='+builTripsDate(tripStartDate)+' AND Trip_Date__c<='+builTripsDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';
+                            } else {
+                                query = query + ' AND Trip_Date__c>='+buildDateforTripDate(tripStartDate)+' AND Trip_Date__c<='+buildDateforTripDate(tripEndDate)+' AND EmployeeReimbursement__r.Contact_Id__c=\''+selectedManager+'\''+ ' AND EmployeeReimbursement__r.Contact_Id__r.accountid=\''+accountid+'\'';
+                            }
+                            
                         }
                     }
                     
@@ -1147,6 +1181,20 @@ public with sharing class ReportDetailsController
         }
         system.debug('date1'+date1);
         return date1;
+    }
+    public static string builTripsDate (String param1){
+        //String param1 = '7/1/2021';
+        String month;
+        String[] splitDate = param1.Split('/');
+        if(Integer.valueof(splitDate[0]) < 10){
+            splitDate[0] = '0'+splitDate[0];
+        }
+        if(Integer.valueof(splitDate[1]) < 10){
+            splitDate[1] = '0'+splitDate[1];
+        }
+        String tripDate = splitDate[2]+ '-' + splitDate[0] + '-' + splitDate[1];
+        system.debug(tripDate);
+        return tripDate;
     }
     public static String buildDate(String datefield)
     {

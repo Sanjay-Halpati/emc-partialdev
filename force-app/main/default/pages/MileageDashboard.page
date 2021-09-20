@@ -108,14 +108,14 @@
             console.log("ProfileId: " + ProfileId);
             
         $Lightning.use("c:LWCLightningApp", function () {
-            $Lightning.createComponent("c:homePageComponent", {
+            $Lightning.createComponent("c:collectiveDataTable", {
                 //pass parameter values to lwc js controller
                 "accountId": accountId,
                 "Id": Id,
                 "showTeam": showTeam,
                 "admindriver": admindriver,
                 "ProfileId": ProfileId,
-                "plMarketing": plMarketing,
+                "plMarketing": plMarketing
             }, "lwcDemo", function (cmp) {
                 $("#spinner").hide();
                 console.log("Component Created Successfully");

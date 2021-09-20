@@ -1,4 +1,3 @@
-/* Test class */
 @isTest
 public class Account_update_gasprice_Controller_Test
 {

@@ -1,1 +1,1 @@
-DemoClass2Test,DemoClassTest
+DemoClass2Test,DemoClassTest,ReportDetailsController_test,GetDriverDataTest,MassSyncTripsTest,RosterControllerTest

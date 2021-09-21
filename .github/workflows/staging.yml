@@ -6,7 +6,7 @@ name: 'TestingDevlop Push'
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master, staging, develop, TestingDevlop ]
+    branches: [ staging, develop, TestingDevlop ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -58,11 +58,6 @@ jobs:
       # Authorize staging
       - name: 'Authorize staging'
         if: ${{ env.BRANCH_NAME == 'staging' }}
-        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
-
-      # Authorize master
-      - name: 'Authorize master'
-        if: ${{ env.BRANCH_NAME == 'master' }}
         run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
       # Create Delta for TestingDevlop branch

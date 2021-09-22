@@ -53,7 +53,7 @@ jobs:
       # Authorize develop
       - name: 'Authorize develop'
         if: ${{ env.BRANCH_NAME == 'develop' }}
-        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.FULLCOPY_USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
       # Authorize staging
       - name: 'Authorize staging'

@@ -10,3 +10,4 @@ public with sharing class DemoClass {
         System.debug('Test class: ' + a);
     }
 }
+/*END*/

@@ -58,7 +58,7 @@ jobs:
       # Authorize staging
       - name: 'Authorize staging'
         if: ${{ env.BRANCH_NAME == 'staging' }}
-        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+        run: sfdx auth:jwt:grant --clientid=${{secrets.FULLCOPY_CONSUMER_KEY}} --username=${{secrets.FULLCOPY_USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
       # Create Delta for TestingDevlop branch
       - name: 'Install App and Create Delta for TestingDevlop'
@@ -81,7 +81,7 @@ jobs:
           sgd --to develop --from origin/staging --repo . --output .
           cat package/package.xml
       # Create Delta for staging branch
-      - name: 'Install App and Create Delta for develop'
+      - name: 'Install App and Create staging for develop'
         if: ${{ env.BRANCH_NAME == 'staging'}}
         run: |
           sudo npm install sfdx-git-delta@latest -g

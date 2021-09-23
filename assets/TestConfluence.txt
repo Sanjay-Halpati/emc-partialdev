@@ -1,1 +1,1 @@
-DemoClass2Test,DemoClassTest
+RecordUtilityClass_Test

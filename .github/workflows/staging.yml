@@ -81,7 +81,7 @@ jobs:
           sgd --to develop --from origin/staging --repo . --output .
           cat package/package.xml
       # Create Delta for staging branch
-      - name: 'Install App and Create staging for develop'
+      - name: 'Install App and Create Delta for staging'
         if: ${{ env.BRANCH_NAME == 'staging'}}
         run: |
           sudo npm install sfdx-git-delta@latest -g

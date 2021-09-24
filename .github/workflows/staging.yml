@@ -60,6 +60,11 @@ jobs:
         if: ${{ env.BRANCH_NAME == 'staging' }}
         run: sfdx auth:jwt:grant --clientid=${{secrets.FULLCOPY_CONSUMER_KEY}} --username=${{secrets.FULLCOPY_USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
+      # Authorize master
+      - name: 'Authorize master'
+        if: ${{ env.BRANCH_NAME == 'master'}}
+        run: sfdx auth:jwt:grant --clientid=${{secrets.PRODUCTION_CONSUMER_KEY}} --username=${{secrets.PRODUCTION_USERNAME}} --instanceurl=${{secrets.SFDC_LOGIN_PRODUCTION_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+
       # Create Delta for TestingDevlop branch
       - name: 'Install App and Create Delta for TestingDevlop'
         if: ${{ env.BRANCH_NAME == 'TestingDevlop'}}
@@ -81,7 +86,7 @@ jobs:
           sgd --to develop --from origin/staging --repo . --output .
           cat package/package.xml
       # Create Delta for staging branch
-      - name: 'Install App and Create staging for develop'
+      - name: 'Install App and Create Delta for staging'
         if: ${{ env.BRANCH_NAME == 'staging'}}
         run: |
           sudo npm install sfdx-git-delta@latest -g
@@ -89,6 +94,16 @@ jobs:
           git fetch --all
           git --no-pager diff --name-status staging origin/master
           sgd --to staging --from origin/master --repo . --output .
+          cat package/package.xml
+      # Create Delta for master branch
+      - name: 'Install App and Create Delta for master'
+        if: ${{ env.BRANCH_NAME == 'master'}}
+        run: |
+          sudo npm install sfdx-git-delta@latest -g
+          git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+          git fetch --all
+          git --no-pager diff --name-status master origin/master
+          sgd --to master --from origin/master --repo . --output .
           cat package/package.xml
       
       # convert

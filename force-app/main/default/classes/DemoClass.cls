@@ -7,6 +7,7 @@ public with sharing class DemoClass {
     /* Add Test comment 4 */
     /* Add Test comment 5 */
     /* Add Test comment 6 */
+    /* Add Test comment 7 */
     /* Add Test comment in emc-priyanka-demofeature2 branch*/
     public DemoClass() {
         Decimal a = 6+6;

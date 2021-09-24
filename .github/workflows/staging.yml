@@ -102,8 +102,8 @@ jobs:
           sudo npm install sfdx-git-delta@latest -g
           git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
           git fetch --all
-          git --no-pager diff --name-status preproduction origin/master
-          sgd --to preproduction --from origin/master --repo . --output .
+          git --no-pager diff --name-status master origin/preproduction
+          sgd --to master --from origin/preproduction --repo . --output .
           cat package/package.xml
       
       # convert

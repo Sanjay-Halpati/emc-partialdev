@@ -58,12 +58,12 @@ jobs:
       # Authorize staging
       - name: 'Authorize staging'
         if: ${{ env.BRANCH_NAME == 'staging' }}
-        run: sfdx auth:jwt:grant --clientid=${{secrets.FULLCOPY_CONSUMER_KEY}} --username=${{secrets.FULLCOPY_USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.FULLCOPY_USERNAME}} --instanceurl=${{secrets.SFDC_Login_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
-      # Authorize master
-      - name: 'Authorize master'
-        if: ${{ env.BRANCH_NAME == 'master'}}
-        run: sfdx auth:jwt:grant --clientid=${{secrets.PRODUCTION_CONSUMER_KEY}} --username=${{secrets.PRODUCTION_USERNAME}} --instanceurl=${{secrets.SFDC_LOGIN_PRODUCTION_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+      # Authorize preproduction
+      - name: 'Authorize preproduction'
+        if: ${{ env.BRANCH_NAME == 'preproduction'}}
+        run: sfdx auth:jwt:grant --clientid=${{secrets.CONSUMER_KEY}} --username=${{secrets.PRODUCTION_USERNAME}} --instanceurl=${{secrets.SFDC_LOGIN_PRODUCTION_URL}} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
 
       # Create Delta for TestingDevlop branch
       - name: 'Install App and Create Delta for TestingDevlop'
